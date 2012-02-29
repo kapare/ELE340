@@ -21,7 +21,7 @@ END MainDecoder;
 
 ARCHITECTURE MainDecoderArchitecture OF MainDecoder IS
   -- Signaux représentant tout les valeurs de control en output.
-  SIGNAL s_Control: STD_LOGIC_VECTOR (9 DOWNTO 0);
+  SIGNAL s_Control: STD_LOGIC_VECTOR (11 DOWNTO 0);
 
 BEGIN
   
