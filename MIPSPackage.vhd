@@ -29,6 +29,15 @@ COMPONENT ALUDecoder IS
   ); 
 END COMPONENT;
 
+COMPONENT PC IS
+   PORT (
+        Instr : IN STD_LOGIC_VECTOR (25 DOWNTO 0);
+        Clock, Reset, PCSrc, Jump : IN STD_LOGIC;
+        SignImm : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+        PC : OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
+        );
+ END COMPONENT;       
+
 COMPONENT MUX21_5 IS
   GENERIC ( Mux_Size : integer := 5 );
   PORT ( 
@@ -45,6 +54,7 @@ COMPONENT MUX21_32 IS
     MUXSel: IN STD_LOGIC;
     MUXOutput: OUT STD_LOGIC_VECTOR (Mux_Size DOWNTO 0)	
   );
+
 END COMPONENT;
 
 END PACKAGE;
