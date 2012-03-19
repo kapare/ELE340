@@ -38,16 +38,7 @@ COMPONENT PC IS
         );
  END COMPONENT;       
 
-COMPONENT MUX21_5 IS
-  GENERIC ( Mux_Size : integer := 5 );
-  PORT ( 
-    MUXInput0, MUXInput1: IN STD_LOGIC_VECTOR (Mux_Size DOWNTO 0);
-    MUXSel: IN STD_LOGIC;
-    MUXOutput: OUT STD_LOGIC_VECTOR (Mux_Size DOWNTO 0)	
-  );
-END COMPONENT;
-
-COMPONENT MUX21_32 IS
+COMPONENT MUX21_Generic IS
   GENERIC ( Mux_Size : integer := 32 );
   PORT ( 
     MUXInput0, MUXInput1: IN STD_LOGIC_VECTOR (Mux_Size DOWNTO 0);
@@ -57,4 +48,110 @@ COMPONENT MUX21_32 IS
 
 END COMPONENT;
 
+COMPONENT full_adder_32 IS 		
+PORT (
+  a, b, c_in : IN STD_LOGIC_VECTOR (31 downto 0);
+  sum, c_out : OUT STD_LOGIC_VECTOR (31 downto 0)
+);
+END COMPONENT;
+
+COMPONENT alu_32 IS 
+  
+   GENERIC (ALU_SIZE: integer := 31); 
+PORT (
+   SrcA, SrcB: IN STD_LOGIC_VECTOR (ALU_SIZE DOWNTO 0);
+   ALUControl_32 : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+   c_out: OUT STD_LOGIC;
+   Result_32: OUT STD_LOGIC_VECTOR (ALU_SIZE DOWNTO 0);
+   zero: OUT std_logic
+); END COMPONENT ;
+
+
+COMPONENT alu_1 IS PORT (
+   alu_a, alu_b, alu_c_in, less : IN STD_LOGIC;
+   ALUControl : IN STD_LOGIC_VECTOR (3 downto 0);
+   alu_c_out, result, set: OUT STD_LOGIC
+); END COMPONENT;
+
+COMPONENT full_adder IS 		
+PORT (
+  a, b, c_in : IN STD_LOGIC;
+  sum, c_out : OUT STD_LOGIC	
+);
+END COMPONENT;
+
+
+COMPONENT mux4_1
+PORT ( m4_i0, m4_i1, m4_i2, m4_i3: IN std_logic;
+    m4_sel: IN std_logic_vector(1 downto 0) ;
+    m4_q : OUT std_logic);
+END COMPONENT;
+
+COMPONENT mux2_1
+PORT ( m2_i0, m2_i1, m2_sel : IN std_logic;
+    m2_q : OUT std_logic);
+end COMPONENT;
+
+
+
+
+COMPONENT DFlipFlop IS
+  PORT(
+       D : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+       Clock, Reset : IN  STD_LOGIC;
+       Q        : OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
+       );
+END COMPONENT;
+
+COMPONENT LogicRegister IS 
+PORT (
+  RegWrite, ALUSrc, Clock, RegDst: IN STD_LOGIC;
+  Instr25_21, Instr20_16, Instr15_11: IN STD_LOGIC_VECTOR (4 DOWNTO 0);
+  Instr15_0: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+  Result: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+  SrcA, SrcB, rd2, SignExtend: OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
+); 
+END COMPONENT ;
+
+
+
+COMPONENT Controller IS
+  PORT (
+    OPCodeController, FunctController: IN STD_LOGIC_VECTOR (5 DOWNTO 0);
+    Zero: IN STD_LOGIC;
+    PCSrc, MemToRegController, MemReadController, MemWriteController, 
+    ALUSrcController, RegDstController, RegWriteController, 
+    JumpController: OUT STD_LOGIC;
+    ALUControlController: OUT STD_LOGIC_VECTOR (3 DOWNTO 0)
+  ); 
+END COMPONENT;
+
+COMPONENT DataPath IS
+  PORT (
+    Clock: IN STD_LOGIC;
+    Reset: IN STD_LOGIC;
+    MemToReg: IN STD_LOGIC;
+    PCSrc: IN STD_LOGIC;
+    AluSrc: IN STD_LOGIC;
+    RegDst: IN STD_LOGIC;
+    RegWrite: IN STD_LOGIC;
+    Jump: IN STD_LOGIC;
+    Zero: IN STD_LOGIC;
+    ALUControl: STD_LOGIC_VECTOR (3 DOWNTO 0);  
+    Instruction: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+    Data: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+    PC: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+    Result: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+    Rd2: OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
+  ); 
+END COMPONENT;
+
+COMPONENT RegisterBank IS
+   PORT (
+    ra1, ra2, wa3: IN STD_LOGIC_VECTOR (4 DOWNTO 0);
+    wd3: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+    RegWrite, Clock: IN STD_LOGIC;
+    rd1, rd2: OUT STD_LOGIC_VECTOR (31 DOWNTO 0)--TODO Clock Signal
+  ); 
+ END COMPONENT;
 END PACKAGE;

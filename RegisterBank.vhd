@@ -17,8 +17,9 @@ ENTITY RegisterBank IS
   PORT (
     ra1, ra2, wa3: IN STD_LOGIC_VECTOR (4 DOWNTO 0);
     wd3: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-    RegWrite: IN STD_LOGIC;
-    rd1, rd2: OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
+    RegWrite, Clock: IN STD_LOGIC;
+    rd1, rd2: OUT STD_LOGIC_VECTOR (31 DOWNTO 0)	
+	--TODO Clock Signal
   ); 
 END RegisterBank;
 
@@ -42,11 +43,13 @@ BEGIN
   rd1 <= s_RegisterArray(conv_integer(ra1));
   rd2 <= s_RegisterArray(conv_integer(ra2));
   
-  PROCESS (RegWrite)
+  PROCESS (RegWrite, Clock)
   BEGIN  
-    IF (RegWrite = '1') THEN
-      s_RegisterArray(conv_integer(wa3)) <= wd3;
-    END IF;
+    IF (Rising_Edge(Clock))  THEN
+       IF (RegWrite = '1') THEN
+         s_RegisterArray(conv_integer(wa3)) <= wd3;
+       END IF;
+   END IF;
   END PROCESS;
 
 END RegisterBankArchitecture;

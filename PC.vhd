@@ -22,33 +22,35 @@ ENTITY PC IS
 END PC;
    
 ARCHITECTURE PCArchitechture OF PC is
-
+SIGNAL s_SignImmSh2 :  STD_LOGIC_VECTOR (33 DOWNTO 0);
 SIGNAL s_SignImmSh, s_PcNext, s_BascOut, s_PCNextbr, s_PcPlus4, s_PCBranch, s_PCJump: STD_LOGIC_VECTOR (31 DOWNTO 0);
 SIGNAL s_plus4 :  STD_LOGIC_VECTOR (31 DOWNTO 0):= "00000000000000000000000000000100";
 SIGNAL s_Instr_sl2 :  STD_LOGIC_VECTOR (27 DOWNTO 0);
 SIGNAL s_NotConnected : STD_LOGIC_VECTOR (31 DOWNTO 0):= "00000000000000000000000000000000";
 
-
 BEGIN
---component mux x 2
+   
+--component mux x 2--
+port_assign_mux_add : MUX21_GENERIC 
+GENERIC MAP( Mux_Size => 32)
+PORT MAP(
+ MUXInput0 => s_PcPlus4  , 
+ MUXInput1 => s_PCBranch  ,  
+ MUXSel  => PCSrc  , 
+ MUXOutput =>   s_PCNextbr
+ );
 
---port_assign_mux_add : MUX21Generic PORT MAP(
--- MUXInput0 => s_PcPlus4  , 
--- MUXInput1 => s_PCBranch  ,  
--- MUXSel  => PCSrc  , 
--- MUXOutput =>   s_PCNextbr
--- );
-
---port_assign_mux_pcnext : MUX21Generic PORT MAP(
--- MUXInput0 =>  s_PCJump , 
--- MUXInput1 =>  s_MuxAddOut ,  
--- MUXSel  =>   Jump, 
--- MUXOutput => s_PcNext   
---);
+port_assign_mux_pcnext : MUX21_GENERIC 
+GENERIC MAP( Mux_Size => 32)
+PORT MAP(
+ MUXInput0 =>  s_PCJump , 
+ MUXInput1 =>  s_PCNextbr ,  
+ MUXSel  =>   Jump, 
+ MUXOutput => s_PcNext   
+);
 
 
 --component adders x 2
-
 add_plus4 : full_adder_32 PORT MAP(
 a => s_BascOut, 
 b => s_plus4, 
@@ -77,16 +79,11 @@ bascule : DFlipFlop PORT MAP (
   
 );
 
-
-
---lines of code for sl x 2
-s_SignImmSh <= SignImm sll 2; 
-s_PCJump <=  s_PcPlus4(31 downto 28) & (Instr sll 2);
-
---lines for the other interconnections
+s_PCJump <=  s_PcPlus4(31 downto 28) & (Instr & "00");
+s_SignImmSh2 <= SignImm & "00";
+s_SignImmSh <= s_SignImmSh2(31 DOWNTO 0);
 
 PC <= s_BascOut;
-
 
 END PCArchitechture;
 

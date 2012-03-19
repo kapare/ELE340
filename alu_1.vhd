@@ -10,7 +10,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all;
-USE WORK.mypackage.all; 
+USE WORK.mipspackage.all; 
         -- Pour creer un package, il suffit de mettre dans un fichier vide (e.g. mypackage.vhdl)
 				-- toute les declarations de components souhaites
 				-- et compiler avec vcom mypackage.vhdl en n'oubliant pas d'inserrer les librairies ieee, std...
