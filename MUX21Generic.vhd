@@ -14,16 +14,16 @@ USE ieee.std_logic_unsigned.all;
 ENTITY MUX21Generic IS
   GENERIC ( Mux_Size : integer := 32 );
   PORT ( 
-    MUXInput0, MUXInput1: IN STD_LOGIC_VECTOR (Mux_Size DOWNTO 0);
+    MUXInput0, MUXInput1: IN STD_LOGIC_VECTOR ((Mux_Size-1) DOWNTO 0);
     MUXSel: IN STD_LOGIC;
-    MUXOutput: OUT STD_LOGIC_VECTOR (Mux_Size DOWNTO 0)	
+    MUXOutput: OUT STD_LOGIC_VECTOR ((Mux_Size-1) DOWNTO 0)	
   );
 END MUX21Generic;
   
 ARCHITECTURE MUX21GenericArchitecture OF MUX21Generic IS
 BEGIN
     
-  PROCESS (MUXSel)
+  PROCESS (MUXSel,MUXInput0, MUXInput1)
   BEGIN  
     IF (MUXSel = '0') THEN
       MUXOutput <= MUXInput0;

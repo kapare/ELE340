@@ -12,26 +12,32 @@ USE ieee.std_logic_arith.ALL;
 USE ieee.std_logic_unsigned. ALL;
 USE WORK.MIPSPackage.ALL;
 
-ENTITY PC IS
+ENTITY PC1 IS
    PORT (
         Instr : IN STD_LOGIC_VECTOR (25 DOWNTO 0);
         Clock, Reset, PCSrc, Jump : IN STD_LOGIC;
         SignImm : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
         PC : OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
         );
-END PC;
+END PC1;
    
-ARCHITECTURE PCArchitechture OF PC is
+ARCHITECTURE PCArchitechture OF PC1 is
 SIGNAL s_SignImmSh2 :  STD_LOGIC_VECTOR (33 DOWNTO 0);
 SIGNAL s_SignImmSh, s_PcNext, s_BascOut, s_PCNextbr, s_PcPlus4, s_PCBranch, s_PCJump: STD_LOGIC_VECTOR (31 DOWNTO 0);
 SIGNAL s_plus4 :  STD_LOGIC_VECTOR (31 DOWNTO 0):= "00000000000000000000000000000100";
 SIGNAL s_Instr_sl2 :  STD_LOGIC_VECTOR (27 DOWNTO 0);
 SIGNAL s_NotConnected : STD_LOGIC_VECTOR (31 DOWNTO 0):= "00000000000000000000000000000000";
 
+SIGNAL test : STD_LOGIC_VECTOR (7 DOWNTO 0);
+SIGNAL test2 : STD_LOGIC_VECTOR (7 DOWNTO 0);
+CONSTANT value : integer := 1;
+
 BEGIN
+
    
 --component mux x 2--
-port_assign_mux_add : MUX21_GENERIC 
+
+port_assign_mux_add : MUX21Generic 
 GENERIC MAP( Mux_Size => 32)
 PORT MAP(
  MUXInput0 => s_PcPlus4  , 
@@ -40,7 +46,7 @@ PORT MAP(
  MUXOutput =>   s_PCNextbr
  );
 
-port_assign_mux_pcnext : MUX21_GENERIC 
+port_assign_mux_pcnext : MUX21Generic 
 GENERIC MAP( Mux_Size => 32)
 PORT MAP(
  MUXInput0 =>  s_PCJump , 
@@ -51,6 +57,7 @@ PORT MAP(
 
 
 --component adders x 2
+
 add_plus4 : full_adder_32 PORT MAP(
 a => s_BascOut, 
 b => s_plus4, 
@@ -79,11 +86,16 @@ bascule : DFlipFlop PORT MAP (
   
 );
 
+
+
+
+
+
 s_PCJump <=  s_PcPlus4(31 downto 28) & (Instr & "00");
 s_SignImmSh2 <= SignImm & "00";
 s_SignImmSh <= s_SignImmSh2(31 DOWNTO 0);
-
 PC <= s_BascOut;
+
 
 END PCArchitechture;
 

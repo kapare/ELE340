@@ -13,6 +13,31 @@ USE ieee.std_logic_unsigned. all;
   
 PACKAGE MIPSPackage IS
 
+COMPONENT dmem is --single cycle MIPS processor
+PORT (clk, MemWrite, MemRead: in std_logic;  
+   a, WriteData: in std_logic_vector(31 downto 0); 
+   ReadData: out std_logic_vector(31 downto 0));
+end COMPONENT; -- dmem;
+
+
+COMPONENT imem is --single cycle MIPS processor
+PORT (aa: in std_logic_vector(5 downto 0);
+   rd: out std_logic_vector(31 downto 0));
+end COMPONENT; -- imem;
+
+COMPONENT MIPS IS
+  PORT (
+    Clock: IN STD_LOGIC;
+    Reset: IN STD_LOGIC;
+    Instruction: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+    Data: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+    PC: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+    Result: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+    Rd2: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+    MemWrite, MemRead: OUT STD_LOGIC
+  ); 
+END COMPONENT;
+
 COMPONENT MainDecoder IS
   PORT (
     OPCode: IN STD_LOGIC_VECTOR (5 DOWNTO 0);
@@ -29,7 +54,7 @@ COMPONENT ALUDecoder IS
   ); 
 END COMPONENT;
 
-COMPONENT PC IS
+COMPONENT PC1 IS
    PORT (
         Instr : IN STD_LOGIC_VECTOR (25 DOWNTO 0);
         Clock, Reset, PCSrc, Jump : IN STD_LOGIC;
@@ -38,7 +63,7 @@ COMPONENT PC IS
         );
  END COMPONENT;       
 
-COMPONENT MUX21_Generic IS
+COMPONENT MUX21Generic IS
   GENERIC ( Mux_Size : integer := 32 );
   PORT ( 
     MUXInput0, MUXInput1: IN STD_LOGIC_VECTOR (Mux_Size DOWNTO 0);
@@ -136,7 +161,7 @@ COMPONENT DataPath IS
     RegDst: IN STD_LOGIC;
     RegWrite: IN STD_LOGIC;
     Jump: IN STD_LOGIC;
-    Zero: IN STD_LOGIC;
+    Zero: OUT STD_LOGIC;
     ALUControl: STD_LOGIC_VECTOR (3 DOWNTO 0);  
     Instruction: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
     Data: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
@@ -154,4 +179,6 @@ COMPONENT RegisterBank IS
     rd1, rd2: OUT STD_LOGIC_VECTOR (31 DOWNTO 0)--TODO Clock Signal
   ); 
  END COMPONENT;
+ 
+ 
 END PACKAGE;

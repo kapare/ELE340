@@ -22,7 +22,7 @@ BEGIN
   PROCESS(Clock, Reset)
   BEGIN
     IF (Reset = '1') then
-	    Q <= "0000000000000000000000000000000";
+	    Q <= X"00000000";
     ELSIF (RISING_EDGE(clock)) THEN
       Q <= D;
     end if;

@@ -2,7 +2,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all;
-USE WORK.mypackage.ALL;
+USE WORK.mipspackage.ALL;
 
 ENTITY mux4_1 IS
  PORT(

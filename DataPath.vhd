@@ -25,7 +25,7 @@ ENTITY DataPath IS
     RegWrite: IN STD_LOGIC;
     Jump: IN STD_LOGIC;
     ALUControl : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
-    --BitsControl: IN STD_LOGIC;--STD_LOGIC_VECTOR (3 DOWNTO 0);  --@@@ combien de bits???
+   
     Instruction: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
     Data: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
     Zero: OUT STD_LOGIC;
@@ -79,7 +79,7 @@ BEGIN
  ); 
   
   
-DataMUX : MUX21_GENERIC
+DataMUX : MUX21Generic
 GENERIC MAP( Mux_Size => 32)
  PORT MAP(
  MUXInput0 => Data  , 

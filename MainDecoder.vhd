@@ -15,7 +15,7 @@ ENTITY MainDecoder IS
   PORT (
     OPCode: IN STD_LOGIC_VECTOR (5 DOWNTO 0);
     MemToReg, MemRead, MemWrite, Branch, ALUSrc, RegDst, RegWrite, Jump: OUT STD_LOGIC;
-    ALUOperation: OUT STD_LOGIC_VECTOR (3 DOWNTO 0)
+    ALUOperation: OUT STD_LOGIC_VECTOR (1 DOWNTO 0)
   ); 
 END MainDecoder;
 

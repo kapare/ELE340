@@ -22,7 +22,7 @@ PORT (
 ); END LogicRegister ;
 
 ARCHITECTURE LogicRegisterArchitecture OF LogicRegister IS
-  SIGNAL s_WriteReg, s_Muxwa3: STD_LOGIC_VECTOR (4 DOWNTO 0);
+  SIGNAL s_WriteReg: STD_LOGIC_VECTOR (4 DOWNTO 0);
   SIGNAL s_SignImm, s_rd2: STD_LOGIC_VECTOR (31 DOWNTO 0);
  
 BEGIN
@@ -30,15 +30,16 @@ BEGIN
   RegPortMap : RegisterBank PORT MAP( 
   ra1 => Instr25_21,
   ra2 => Instr20_16,
-  wa3 => s_Muxwa3,
+  wa3 => s_WriteReg,
   wd3 => Result,      
   RegWrite => RegWrite,
   rd1 => SrcA,
-  rd2 => SrcB,
+  rd2 => s_rd2,
   Clock => Clock
   );
 
-  MUXInput: MUX21_Generic 
+  
+  MUXInput: MUX21Generic 
   GENERIC MAP( Mux_Size => 5)
   PORT MAP( 
   MUXInput0 => Instr20_16,
@@ -47,7 +48,7 @@ BEGIN
   MUXOutput => s_WriteReg
   );  
   
-  MUXOutput: MUX21_Generic 
+  MUXOutput: MUX21Generic 
   GENERIC MAP( Mux_Size => 32)
   PORT MAP( 
   MUXInput0 => s_rd2,
@@ -68,5 +69,7 @@ BEGIN
   
   -- Sign Extend output
   SignExtend <= s_SignImm;
+  
+  rd2 <= s_rd2;
   
 END LogicRegisterArchitecture;
