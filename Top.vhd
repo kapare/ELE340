@@ -12,25 +12,22 @@ USE ieee.std_logic_arith.ALL;
 USE ieee.std_logic_unsigned. ALL;
 USE WORK.MIPSPackage.ALL;
 
--- l'entité du plus haut niveau qui incorpore la mémoire d'instructions et la mémoire du data
+-- L'entité qui est le niveau le plus haut qui inclus la mémoire d'instructions et la mémoire de donnée.
 ENTITY Top IS
-   PORT (
-        Reset, Clock : IN STD_LOGIC;
+  PORT (Reset, Clock: IN STD_LOGIC;
         MemRead, MemWrite: OUT STD_LOGIC;
-        PC, WriteData, DataAddr : OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
-        );
+        PC, WriteData, DataAddr: OUT STD_LOGIC_VECTOR (31 DOWNTO 0));
 END Top;
 
 ARCHITECTURE TOPArchitechture OF Top is 
--- signaux 32 bits pour les connexions inter composantes, nommé après leur fonctions
+-- Signaux pour les connexions inter composantes.
 SIGNAL s_ImemToMIPS, s_WriteData, s_DataAddr, s_ReadData, s_PC :STD_LOGIC_VECTOR (31 DOWNTO 0) := x"00000000";
--- signaux 1 bit pour memread et memqrite
 SIGNAL s_MemRead, s_MemWrite : STD_LOGIC;
 
 BEGIN
 
--- le port map du processeur
-portAssignMIPs : MIPS PORT MAP(
+-- Port map du processeur MIPS interconnecté avec les signaux internes.
+portAssignMIPS : MIPS PORT MAP(
     Clock =>Clock,
     Reset =>Reset,
     Instruction => s_ImemToMIPS,
@@ -40,16 +37,15 @@ portAssignMIPs : MIPS PORT MAP(
     Rd2 =>s_WriteData,
     MemWrite => s_MemWrite,
     MemRead => s_MemRead
-  
  );
  
- -- le port map du intruction memory 
+ -- Port map de la mémoire d'intruction interconnecté avec les signaux internes. 
  port_assign_IMEM : IMEM PORT MAP(
    aa => s_PC (7 DOWNTO 2),
    rd => s_ImemToMIPS
  );
  
- -- le port map pour la memoire du data
+ -- Port map pour la memoire du data interconnecté avec les signaux interne.
  port_assign_DMEM: DMEM PORT MAP (
    clk =>Clock,
    MemWrite =>s_MemWrite,
@@ -59,7 +55,7 @@ portAssignMIPs : MIPS PORT MAP(
    ReadData =>s_ReadData
 );
 
--- les connections au sorties
+-- Connections entre les signaux internes et les sorties.
 PC <= s_PC;
 WriteData <= s_WriteData;
 DataAddr <= s_DataAddr;

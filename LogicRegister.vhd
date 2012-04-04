@@ -13,24 +13,21 @@ USE ieee.std_logic_unsigned. ALL;
 USE WORK.MIPSPackage.ALL;
 
 ENTITY LogicRegister IS 
-PORT (
-  RegWrite, ALUSrc, Clock, RegDst: IN STD_LOGIC;
-  Instr25_21, Instr20_16, Instr15_11: IN STD_LOGIC_VECTOR (4 DOWNTO 0);
-  Instr15_0: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
-  Result: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-  SrcA, SrcB, rd2, SignExtend: OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
-); END LogicRegister ;
+  PORT (RegWrite, ALUSrc, Clock, RegDst: IN STD_LOGIC;
+        Instr25_21, Instr20_16, Instr15_11: IN STD_LOGIC_VECTOR (4 DOWNTO 0);
+        Instr15_0: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+        Result: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+        SrcA, SrcB, rd2, SignExtend: OUT STD_LOGIC_VECTOR (31 DOWNTO 0));
+END LogicRegister ;
 
 ARCHITECTURE LogicRegisterArchitecture OF LogicRegister IS
-  
-  --signal qui chemine la valeur de notre MUX au entrée wa3 de notre banc de registres
-  SIGNAL s_WriteReg: STD_LOGIC_VECTOR (4 DOWNTO 0);
-  
-  --signaux qui entrent dans le MUX situé après la sortie de notre banc de registres
-  SIGNAL s_SignImm, s_rd2: STD_LOGIC_VECTOR (31 DOWNTO 0);
+-- Signal qui chemine la valeur de notre MUX a l'entrée wa3 de notre banc de registres
+SIGNAL s_WriteReg: STD_LOGIC_VECTOR (4 DOWNTO 0);
+-- Signaux qui entrent dans le MUX situé après la sortie de notre banc de registres
+SIGNAL s_SignImm, s_rd2: STD_LOGIC_VECTOR (31 DOWNTO 0);
  
 BEGIN
-  --portmap qui assigne les entrées et sorties de notre banc de registres
+  -- Portmap qui assigne les entrées et sorties de notre banc de registres
   RegPortMap : RegFile PORT MAP( 
   ra1 => Instr25_21,
   ra2 => Instr20_16,
@@ -42,7 +39,7 @@ BEGIN
   clk => Clock
   );
 
-  --MUX qui determine la valeur acheminé l'entrée wa3 de notre banc de registres
+  -- MUX qui determine la valeur acheminé a l'entrée wa3 de notre banc de registres
   MUXInput: MUX21Generic 
   GENERIC MAP( Mux_Size => 5)
   PORT MAP( 
@@ -52,7 +49,7 @@ BEGIN
   MUXOutput => s_WriteReg
   );  
   
-  --MUX qui determine la valeur acheminé a la source B de notre ALU
+  -- MUX qui determine la valeur acheminé a la source B de notre ALU
   MUXOutput: MUX21Generic 
   GENERIC MAP( Mux_Size => 32)
   PORT MAP( 
@@ -75,7 +72,7 @@ BEGIN
   -- Sign Extend output
   SignExtend <= s_SignImm;
   
-  --connexion de la sortie rd2 de notre banc de registres au sortie correspondante de cette module(LogicRegister)
+  -- Connexion de la sortie rd2 de notre banc de registres au sortie correspondante de ce module(LogicRegister)
   rd2 <= s_rd2;
   
 END LogicRegisterArchitecture;

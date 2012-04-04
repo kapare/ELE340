@@ -12,32 +12,27 @@ USE ieee.std_logic_arith.ALL;
 USE ieee.std_logic_unsigned. ALL;
 USE WORK.MIPSPackage.ALL;
 
--- l'entité du processeur
+-- L'entité du processeur
 ENTITY MIPS IS
-  PORT (
-    Clock: IN STD_LOGIC;
-    Reset: IN STD_LOGIC;
-    Instruction: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-    Data: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-    PC: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
-    Result: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
-    Rd2: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
-    MemWrite, MemRead: OUT STD_LOGIC
-  ); 
+  PORT (Clock: IN STD_LOGIC;
+        Reset: IN STD_LOGIC;
+        Instruction: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+        Data: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+        PC: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+        Result: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+        Rd2: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+        MemWrite, MemRead: OUT STD_LOGIC); 
 END MIPS;
    
 ARCHITECTURE MIPSArchitecture OF MIPS IS
--- signal 4 bit pour le controle de  l'ALU 
-  SIGNAL s_ALUControl : STD_LOGIC_VECTOR (3 DOWNTO 0);
---  signals 1 bit pour les bits de controle
-  SIGNAL s_MemToReg, s_ALUSrc, s_RegDst, s_RegWrite, s_Jump, s_Zero, s_PCSrc : STD_LOGIC;
+-- Signal 4 bit pour le controle de  l'ALU 
+SIGNAL s_ALUControl : STD_LOGIC_VECTOR (3 DOWNTO 0);
+-- Signals 1 bit pour les bits de controle
+SIGNAL s_MemToReg, s_ALUSrc, s_RegDst, s_RegWrite, s_Jump, s_Zero, s_PCSrc : STD_LOGIC;
   
-  BEGIN
- 
-
-  -- port map pour le controlleur du mips 
-  ControllerPortMap : Controller PORT MAP( 
-    
+BEGIN
+  -- Port map pour le controlleur du mips 
+  ControllerPortMap : Controller PORT MAP(   
     OPCodeController => Instruction(31 downto 26), 
     FunctController =>  Instruction(5 downto 0), 
     Zero => s_Zero,
@@ -51,12 +46,9 @@ ARCHITECTURE MIPSArchitecture OF MIPS IS
     JumpController => s_Jump,
     ALUControlController => s_ALUControl
   );
-    
 	
-	
--- port map pour le datapath, donc pour la logique du processeur	
-    DataPathPortMap: DataPath PORT MAP(
-  
+  -- Port map pour le datapath, donc pour la logique du processeur	
+  DataPathPortMap: DataPath PORT MAP(
     Clock => Clock,
     Reset => Reset,
     MemToReg => s_MemToReg,
@@ -75,6 +67,3 @@ ARCHITECTURE MIPSArchitecture OF MIPS IS
   ); 
     
 END MIPSArchitecture;
-
-
-

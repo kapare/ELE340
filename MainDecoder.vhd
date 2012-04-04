@@ -12,19 +12,16 @@ USE ieee.std_logic_arith.ALL;
 USE ieee.std_logic_unsigned. ALL;
 
 ENTITY MainDecoder IS
-  PORT (
-    OPCode: IN STD_LOGIC_VECTOR (5 DOWNTO 0);
-    MemToReg, MemRead, MemWrite, Branch, ALUSrc, RegDst, RegWrite, Jump: OUT STD_LOGIC;
-    ALUOperation: OUT STD_LOGIC_VECTOR (1 DOWNTO 0)
-  ); 
+  PORT (OPCode: IN STD_LOGIC_VECTOR (5 DOWNTO 0);
+        MemToReg, MemRead, MemWrite, Branch, ALUSrc, RegDst, RegWrite, Jump: OUT STD_LOGIC;
+        ALUOperation: OUT STD_LOGIC_VECTOR (1 DOWNTO 0)); 
 END MainDecoder;
 
 ARCHITECTURE MainDecoderArchitecture OF MainDecoder IS
-  -- Signaux représentant tout les valeurs de control en output.
-  SIGNAL s_Control: STD_LOGIC_VECTOR (11 DOWNTO 0);
+-- Signaux représentant toutes les valeurs de controle en sortie.
+SIGNAL s_Control: STD_LOGIC_VECTOR (11 DOWNTO 0);
 
 BEGIN
-  
   PROCESS (OPCode)
     BEGIN  
       -- Analyseur du OPCode et assignation des valeurs de control. 

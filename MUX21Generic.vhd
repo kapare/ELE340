@@ -11,13 +11,13 @@ USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all;
 
+-- Générique MUX ayant une valeur par defaut de 32 bits, voir autre utilisation dans MIPSPackage.
+
 ENTITY MUX21Generic IS
   GENERIC ( Mux_Size : integer := 32 );
-  PORT ( 
-    MUXInput0, MUXInput1: IN STD_LOGIC_VECTOR ((Mux_Size-1) DOWNTO 0);
-    MUXSel: IN STD_LOGIC;
-    MUXOutput: OUT STD_LOGIC_VECTOR ((Mux_Size-1) DOWNTO 0)	
-  );
+  PORT (MUXInput0, MUXInput1: IN STD_LOGIC_VECTOR ((Mux_Size-1) DOWNTO 0);
+        MUXSel: IN STD_LOGIC;
+        MUXOutput: OUT STD_LOGIC_VECTOR ((Mux_Size-1) DOWNTO 0));
 END MUX21Generic;
   
 ARCHITECTURE MUX21GenericArchitecture OF MUX21Generic IS
