@@ -30,7 +30,7 @@ ARCHITECTURE alu_32_archi OF alu_32 IS
 -- Signaux representant les 32 carry out.
 SIGNAL s_c_out : STD_LOGIC_VECTOR ((ALU_SIZE + 1) DOWNTO 0);
 -- Signaux representant les 32 resultat de chaque ALU 1 bit.
-SIGNAL s_result : STD_LOGIC_VECTOR (ALU_SIZE DOWNTO 0);     
+SIGNAL s_result : STD_LOGIC_VECTOR (ALU_SIZE DOWNTO 0) := (others =>'0');     
 -- Signaux representant les 32 set de chaque ALU 1 bit.
 SIGNAL s_set : STD_LOGIC_VECTOR (ALU_SIZE DOWNTO 0);
 -- Signaux representant les 32 less de chaque ALU 1 bit.

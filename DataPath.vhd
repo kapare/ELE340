@@ -13,7 +13,7 @@ USE ieee.std_logic_unsigned. ALL;
 USE WORK.MIPSPackage.ALL;
 
 
-
+-- l'entité qui permet de relier toutes les unités de logique
 ENTITY DataPath IS
   PORT (
     Clock: IN STD_LOGIC;
@@ -38,10 +38,13 @@ END DataPath;
   
   
 ARCHITECTURE DataPathArchitecture OF DataPath IS
+-- signals 32 bits pour les connexions inter composantes 
   SIGNAL s_SignExImm, s_Result, s_MUXOut, s_SrcA, s_SrcB, s_Instr: STD_LOGIC_VECTOR (31 DOWNTO 0);
+-- signals 1 bit pour les connections intercomposantes
   SIGNAL s_ZeroAndPCSrc, s_Zero, s_PCSrc, s_NotConnected: STD_LOGIC;
+ 
 BEGIN  
-  
+-- port map pour connecter la logique du program counter 
  LogiquePC: PC1 PORT MAP(    
     Instr => Instruction(25 downto 0),
     Clock => Clock,
@@ -52,6 +55,8 @@ BEGIN
     PC => PC
   );
   
+  
+ -- port map pour connecter  la logique pour le bank de  registres
   LogiqueRegistre :  LogicRegister PORT MAP (
    RegWrite => RegWrite,
    ALUSrc  => AluSrc,
@@ -69,6 +74,7 @@ BEGIN
     
   );
   
+-- port map pour connecter la logique arithmétique
   ALU : alu_32 PORT MAP(
    SrcA => s_SrcA,
    SrcB => s_SrcB,
@@ -78,19 +84,19 @@ BEGIN
    zero => Zero
  ); 
   
-  
+-- Port map pour connecter le mutiplexeur qui selecte quel information sera ecrite au registre
 DataMUX : MUX21Generic
 GENERIC MAP( Mux_Size => 32)
  PORT MAP(
- MUXInput0 => Data  , 
- MUXInput1 => s_Result  ,  
- MUXSel  => MemToReg  , 
- MUXOutput =>   s_MUXOut
+ MUXInput0 => s_Result, 
+ MUXInput1 => Data, 
+ MUXSel  => MemToReg, 
+ MUXOutput => s_MUXOut
 );
   
-  
+--connexion de la sortie au signal entre le mux et l'ALU
   Result <= s_Result;
- -- s_ZeroAndPCSrc <= s_Zero AND s_PCSrc;
+ 
   
   
   

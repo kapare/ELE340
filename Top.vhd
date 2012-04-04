@@ -12,7 +12,7 @@ USE ieee.std_logic_arith.ALL;
 USE ieee.std_logic_unsigned. ALL;
 USE WORK.MIPSPackage.ALL;
 
-
+-- l'entité du plus haut niveau qui incorpore la mémoire d'instructions et la mémoire du data
 ENTITY Top IS
    PORT (
         Reset, Clock : IN STD_LOGIC;
@@ -22,13 +22,14 @@ ENTITY Top IS
 END Top;
 
 ARCHITECTURE TOPArchitechture OF Top is 
-
-SIGNAL s_ImemToMIPS, s_WriteData, s_DataAddr, s_ReadData, s_PC :STD_LOGIC_VECTOR (31 DOWNTO 0); 
+-- signaux 32 bits pour les connexions inter composantes, nommé après leur fonctions
+SIGNAL s_ImemToMIPS, s_WriteData, s_DataAddr, s_ReadData, s_PC :STD_LOGIC_VECTOR (31 DOWNTO 0) := x"00000000";
+-- signaux 1 bit pour memread et memqrite
 SIGNAL s_MemRead, s_MemWrite : STD_LOGIC;
 
 BEGIN
 
-
+-- le port map du processeur
 portAssignMIPs : MIPS PORT MAP(
     Clock =>Clock,
     Reset =>Reset,
@@ -42,12 +43,13 @@ portAssignMIPs : MIPS PORT MAP(
   
  );
  
- 
+ -- le port map du intruction memory 
  port_assign_IMEM : IMEM PORT MAP(
-   aa => s_PC (31 DOWNTO 26),
+   aa => s_PC (7 DOWNTO 2),
    rd => s_ImemToMIPS
  );
  
+ -- le port map pour la memoire du data
  port_assign_DMEM: DMEM PORT MAP (
    clk =>Clock,
    MemWrite =>s_MemWrite,
@@ -57,6 +59,7 @@ portAssignMIPs : MIPS PORT MAP(
    ReadData =>s_ReadData
 );
 
+-- les connections au sorties
 PC <= s_PC;
 WriteData <= s_WriteData;
 DataAddr <= s_DataAddr;

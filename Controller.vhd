@@ -1,4 +1,4 @@
---========================= Controller.vhd ============================
+ --========================= Controller.vhd ============================
 -- ELE-340 Conception des systèmes ordinés
 -- HIVER 2010, Ecole de technologie supérieure
 -- Auteur : Kevyn-Alexandre Pare, Sean Beitz, Jonathan Riel-Landry
@@ -12,6 +12,7 @@ USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned. all;
 USE WORK.MIPSPackage.ALL;
 
+--ceci est l'entité qui va determiner les instruction qui seront envoyer au modules individuels
 ENTITY Controller IS
   PORT (
     OPCodeController, FunctController: IN STD_LOGIC_VECTOR (5 DOWNTO 0);
@@ -24,7 +25,8 @@ ENTITY Controller IS
 END Controller;
 
 ARCHITECTURE ControllerArchitecture OF Controller IS
-
+  
+--signaux pour les interconnections entre module
 SIGNAL s_ALUOperation: STD_LOGIC_VECTOR (1 DOWNTO 0);
 SIGNAL s_Branch: STD_LOGIC;
 
@@ -51,6 +53,7 @@ ALUD: ALUDecoder PORT MAP(
   ALUControl => ALUControlController
   );
   
+  --operation AND logique utilisé dans la commnande branch
 PCSrc <= Zero AND s_Branch;  
   
 END ControllerArchitecture;

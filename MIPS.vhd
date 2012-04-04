@@ -12,6 +12,7 @@ USE ieee.std_logic_arith.ALL;
 USE ieee.std_logic_unsigned. ALL;
 USE WORK.MIPSPackage.ALL;
 
+-- l'entité du processeur
 ENTITY MIPS IS
   PORT (
     Clock: IN STD_LOGIC;
@@ -26,13 +27,15 @@ ENTITY MIPS IS
 END MIPS;
    
 ARCHITECTURE MIPSArchitecture OF MIPS IS
+-- signal 4 bit pour le controle de  l'ALU 
   SIGNAL s_ALUControl : STD_LOGIC_VECTOR (3 DOWNTO 0);
+--  signals 1 bit pour les bits de controle
   SIGNAL s_MemToReg, s_ALUSrc, s_RegDst, s_RegWrite, s_Jump, s_Zero, s_PCSrc : STD_LOGIC;
   
   BEGIN
  
 
-  --ASSIGN SIGNALS AND VARIOUS
+  -- port map pour le controlleur du mips 
   ControllerPortMap : Controller PORT MAP( 
     
     OPCodeController => Instruction(31 downto 26), 
@@ -49,6 +52,9 @@ ARCHITECTURE MIPSArchitecture OF MIPS IS
     ALUControlController => s_ALUControl
   );
     
+	
+	
+-- port map pour le datapath, donc pour la logique du processeur	
     DataPathPortMap: DataPath PORT MAP(
   
     Clock => Clock,

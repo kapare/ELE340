@@ -22,23 +22,27 @@ PORT (
 ); END LogicRegister ;
 
 ARCHITECTURE LogicRegisterArchitecture OF LogicRegister IS
+  
+  --signal qui chemine la valeur de notre MUX au entrée wa3 de notre banc de registres
   SIGNAL s_WriteReg: STD_LOGIC_VECTOR (4 DOWNTO 0);
+  
+  --signaux qui entrent dans le MUX situé après la sortie de notre banc de registres
   SIGNAL s_SignImm, s_rd2: STD_LOGIC_VECTOR (31 DOWNTO 0);
  
 BEGIN
-  
-  RegPortMap : RegisterBank PORT MAP( 
+  --portmap qui assigne les entrées et sorties de notre banc de registres
+  RegPortMap : RegFile PORT MAP( 
   ra1 => Instr25_21,
   ra2 => Instr20_16,
   wa3 => s_WriteReg,
   wd3 => Result,      
-  RegWrite => RegWrite,
+  we3 => RegWrite,
   rd1 => SrcA,
   rd2 => s_rd2,
-  Clock => Clock
+  clk => Clock
   );
 
-  
+  --MUX qui determine la valeur acheminé l'entrée wa3 de notre banc de registres
   MUXInput: MUX21Generic 
   GENERIC MAP( Mux_Size => 5)
   PORT MAP( 
@@ -48,6 +52,7 @@ BEGIN
   MUXOutput => s_WriteReg
   );  
   
+  --MUX qui determine la valeur acheminé a la source B de notre ALU
   MUXOutput: MUX21Generic 
   GENERIC MAP( Mux_Size => 32)
   PORT MAP( 
@@ -70,6 +75,7 @@ BEGIN
   -- Sign Extend output
   SignExtend <= s_SignImm;
   
+  --connexion de la sortie rd2 de notre banc de registres au sortie correspondante de cette module(LogicRegister)
   rd2 <= s_rd2;
   
 END LogicRegisterArchitecture;

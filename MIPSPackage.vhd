@@ -13,6 +13,16 @@ USE ieee.std_logic_unsigned. all;
   
 PACKAGE MIPSPackage IS
 
+-- ce fichier contient toutes les déclarations des composantes utilisé dans le projet du processeur mips.
+
+COMPONENT RegFile is --is a 3 port Register File
+PORT (clk: in std_logic;
+   we3 : in std_logic;
+   ra1, ra2, wa3 : in std_logic_vector(4 downto 0);
+   wd3 : in std_logic_vector(31 downto 0);
+   rd1, rd2 : out std_logic_vector(31 downto 0));
+END COMPONENT;
+
 COMPONENT dmem is --single cycle MIPS processor
 PORT (clk, MemWrite, MemRead: in std_logic;  
    a, WriteData: in std_logic_vector(31 downto 0); 
@@ -75,8 +85,8 @@ END COMPONENT;
 
 COMPONENT full_adder_32 IS 		
 PORT (
-  a, b, c_in : IN STD_LOGIC_VECTOR (31 downto 0);
-  sum, c_out : OUT STD_LOGIC_VECTOR (31 downto 0)
+  a, b : IN STD_LOGIC_VECTOR (31 downto 0);
+  sum : OUT STD_LOGIC_VECTOR (31 downto 0)
 );
 END COMPONENT;
 
